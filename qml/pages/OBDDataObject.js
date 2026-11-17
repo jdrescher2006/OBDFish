@@ -301,7 +301,7 @@ var arrayPIDs =
     { pid: "0101", supported: false, bytescount: 4, labeltext: qsTr("Engine light, error number"), unittext: " ", fncConvert: fncConvertDTCCheck },
     { pid: "0103", supported: false, bytescount: 2, labeltext: qsTr("Fuel system 1 and 2"), unittext: " ", fncConvert: fncConvertFuelSystem },
     { pid: "0104", supported: false, bytescount: 1, labeltext: qsTr("Engine Load"), unittext: "%", fncConvert: fncConvertLoad },
-    { pid: "0105", supported: false, bytescount: 1, labeltext: qsTr("Engine Temp"), unittext: "C°", fncConvert: fncConvertTemp },            
+    { pid: "0105", supported: false, bytescount: 1, labeltext: qsTr("Engine Coolant Temp"), unittext: "C°", fncConvert: fncConvertTemp },
     { pid: "0106", supported: false, bytescount: 1, labeltext: qsTr("Short term fuel trim, Bank 1"), unittext: "%", fncConvert: fncConvertFuelTrim },
     { pid: "0107", supported: false, bytescount: 1, labeltext: qsTr("Long term fuel trim, Bank 1"), unittext: "%", fncConvert: fncConvertFuelTrim },
     { pid: "0108", supported: false, bytescount: 1, labeltext: qsTr("Short term fuel trim, Bank 2"), unittext: "%", fncConvert: fncConvertFuelTrim },
@@ -490,7 +490,7 @@ function fncConvertFuelType(data)
 
     data = parseInt(data,16);
 
-    //console.log("Fueltype: " + data);
+    console.log("Fueltype: " + data);
 
     if (data >= 0 && data <= 23)
        return FuelTypes[data];

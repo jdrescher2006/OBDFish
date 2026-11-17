@@ -29,60 +29,26 @@
     </message>
 </context>
 <context>
-    <name>Dyn1Page</name>
+    <name>DynPage</name>
     <message>
-        <source>Dynamic Values 1</source>
-        <translation>Dynamische Werte 1</translation>
+        <source>Settings</source>
+        <translation type="unfinished">Einstellungen</translation>
     </message>
     <message>
-        <source>Cycle time: </source>
-        <translation>Zykluszeit: </translation>
+        <source>Dynamic Values %1</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>The more parameters are requested, the higher the cycle time.&lt;br&gt;To get a more responsive cycle time, go to settings and reduce amount of parameters for this page.</source>
-        <translation>Je mehr Parameter auf einer Seite geladen werden, desto höher ist die Zykluszeit.&lt;br&gt;Um eine kürzere Zykluszeit zu erreichen, kann die Anhzahl der Parameter in den Einstellungen reduziert werden.</translation>
-    </message>
-    <message>
-        <source>Settings</source>
-        <translation>Einstellungen</translation>
-    </message>
-</context>
-<context>
-    <name>Dyn2Page</name>
-    <message>
-        <source>Dynamic Values 2</source>
-        <translation>Dynamische Werte 2</translation>
-    </message>
-    <message>
-        <source>The more parameters are requested, the higher the cycle time.&lt;br&gt;To get a more responsive cycle time, go to settings and reduce amount of parameters for this page.</source>
-        <translation>Je mehr Parameter auf einer Seite geladen werden, desto höher ist die Zykluszeit.&lt;br&gt;Um eine kürzere Zykluszeit zu erreichen, kann die Anhzahl der Parameter in den Einstellungen reduziert werden.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Cycle time: </source>
-        <translation>Zykluszeit: </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Settings</source>
-        <translation>Einstellungen</translation>
-    </message>
-</context>
-<context>
-    <name>Dyn3Page</name>
-    <message>
-        <source>Dynamic Values 3</source>
-        <translation>Dynamische Werte 3</translation>
-    </message>
-    <message>
-        <source>The more parameters are requested, the higher the cycle time.&lt;br&gt;To get a more responsive cycle time, go to settings and reduce amount of parameters for this page.</source>
-        <translation>Je mehr Parameter auf einer Seite geladen werden, desto höher ist die Zykluszeit.&lt;br&gt;Um eine kürzere Zykluszeit zu erreichen, kann die Anhzahl der Parameter in den Einstellungen reduziert werden.</translation>
-    </message>
-    <message>
-        <source>Cycle time: </source>
-        <translation>Zykluszeit: </translation>
-    </message>
-    <message>
-        <source>Settings</source>
-        <translation>Einstellungen</translation>
+        <source>Empty</source>
+        <translation type="unfinished">Leer</translation>
     </message>
 </context>
 <context>
@@ -298,10 +264,6 @@
         <translation>Initialisierung:</translation>
     </message>
     <message>
-        <source>OBD adapters (press to connect):</source>
-        <translation>OBD-Adapter:</translation>
-    </message>
-    <message>
         <source>Found adapters (press to connect):</source>
         <translation>Gefundene Adapter:</translation>
     </message>
@@ -325,6 +287,22 @@
         <source>No supported PID&apos;s found!&lt;br&gt;- turn on ignition/engine&lt;br&gt;- reconnect to OBD adapter</source>
         <translation>Keine unterstützten PID&apos;s gefunden!&lt;br&gt;- Zündung/Motor einschalten&lt;br&gt;- OBD Adapter neu verbinden</translation>
     </message>
+    <message>
+        <source>Supported PID&apos;s 0161-0180...</source>
+        <translation type="unfinished">Unterstützte PID&apos;s 0900-0920... {0161-0180.?}</translation>
+    </message>
+    <message>
+        <source>Supported PID&apos;s 0181-01A0...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Supported PID&apos;s 01A1-01C0...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Supported PID&apos;s 01C1-01E0...</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>OBDDataObject</name>
@@ -339,10 +317,6 @@
     <message>
         <source>Engine Load</source>
         <translation>Motorlast</translation>
-    </message>
-    <message>
-        <source>Engine Temp</source>
-        <translation>Motortemperatur</translation>
     </message>
     <message>
         <source>Intake Air Pressure</source>
@@ -548,6 +522,10 @@
         <source>&lt;br&gt;Closed loop, using at least one oxygen sensor but there is a fault in the feedback system</source>
         <translation>&lt;br&gt;Geschlossene Schleife, mindestens ein Sauerstoffsensor wird verwendet, aber es gibt einen Fehler im Rückkopplungssystem.</translation>
     </message>
+    <message>
+        <source>Engine Coolant Temp</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SettingsPage</name>
@@ -562,6 +540,26 @@
     <message>
         <source>Dynamic Parameters Page: </source>
         <translation>Dynamische Werte Seite: </translation>
+    </message>
+    <message>
+        <source>Parameter %1:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add Parameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Display Style:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Small with label</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Only value but very big</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

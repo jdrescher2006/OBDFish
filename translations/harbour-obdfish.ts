@@ -29,28 +29,13 @@
     </message>
 </context>
 <context>
-    <name>Dyn1Page</name>
-    <message>
-        <source>Dynamic Values 1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cycle time: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The more parameters are requested, the higher the cycle time.&lt;br&gt;To get a more responsive cycle time, go to settings and reduce amount of parameters for this page.</source>
-        <translation type="unfinished"></translation>
-    </message>
+    <name>DynPage</name>
     <message>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>Dyn2Page</name>
     <message>
-        <source>Dynamic Values 2</source>
+        <source>Dynamic Values %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -62,26 +47,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Dyn3Page</name>
-    <message>
-        <source>Dynamic Values 3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The more parameters are requested, the higher the cycle time.&lt;br&gt;To get a more responsive cycle time, go to settings and reduce amount of parameters for this page.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cycle time: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Settings</source>
+        <source>Empty</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -298,10 +264,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>OBD adapters (press to connect):</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Found adapters (press to connect):</source>
         <translation type="unfinished"></translation>
     </message>
@@ -325,6 +287,22 @@
         <source>No supported PID&apos;s found!&lt;br&gt;- turn on ignition/engine&lt;br&gt;- reconnect to OBD adapter</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Supported PID&apos;s 0161-0180...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Supported PID&apos;s 0181-01A0...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Supported PID&apos;s 01A1-01C0...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Supported PID&apos;s 01C1-01E0...</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>OBDDataObject</name>
@@ -338,10 +316,6 @@
     </message>
     <message>
         <source>Engine Load</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Engine Temp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -548,6 +522,10 @@
         <source>&lt;br&gt;Closed loop, using at least one oxygen sensor but there is a fault in the feedback system</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Engine Coolant Temp</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SettingsPage</name>
@@ -561,6 +539,26 @@
     </message>
     <message>
         <source>Dynamic Parameters Page: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Parameter %1:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add Parameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Display Style:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Small with label</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Only value but very big</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -6,7 +6,7 @@ Release: 1
 # http://gitorious.org/meego-developer-tools/spectacle/blobs/master/data/GROUPS
 Group: Qt/Qt
 URL: http://example.org/
-License: LICENSE
+License: GPLv3
 # This must be generated before uploading a package to a remote build service.
 # Usually this line does not need to be modified.
 Sources:
@@ -31,17 +31,18 @@ PkgConfigBR:
   - Qt5Quick
 
 # Build dependencies without a pkgconfig setup can be listed here
-# PkgBR:
-#   - package-needed-to-build
+PkgBR:
+- kf5bluezqt-bluez5-devel
 
 # Runtime dependencies which are not automatically detected
 Requires:
-  - sailfishsilica-qt5 >= 0.10.9 
-  - qt5-qtconnectivity-qtbluetooth
+  - sailfishsilica-qt5 >= 0.10.9
+  - libkeepalive
+  - kf5bluezqt-bluez5-declarative
 
 # All installed files
 Files:
-  - '%{_bindir}'
+  - '%{_bindir}/%{name}'
   - '%{_datadir}/%{name}'
   - '%{_datadir}/applications/%{name}.desktop'
   - '%{_datadir}/icons/hicolor/*/apps/%{name}.png'
