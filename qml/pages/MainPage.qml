@@ -29,7 +29,7 @@ Page
     property bool bWaitForCommandSequenceEnd: false
     property int iInit: 0
     property int iWaitForCommand: 0   
-    property bool bBluetoothScanning: btManager.usableAdapter && btManager.usableAdapter.discovering
+    property bool bBluetoothScanning: Boolean(btManager.usableAdapter && btManager.usableAdapter.discovering)
     property QtObject currentDevice: null
     property QtObject connectionCall: null
 
@@ -452,10 +452,10 @@ Page
             {
                 width: parent.width
                 text: qsTr("Start Scanning...")
-                visible: !btManager.usableAdapter.discovering && !bConnecting && !(currentDevice && currentDevice.connected)
+                visible: !bBluetoothScanning && !bConnecting && !(currentDevice && currentDevice.connected)
                 onClicked:
                 {                    
-                    btManager.usableAdapter.startDiscovery()
+                    if (btManager.usableAdapter) btManager.usableAdapter.startDiscovery()
                 }
                 Image
                 {
@@ -467,10 +467,10 @@ Page
             {
                 width: parent.width
                 text: qsTr("Cancel")
-                visible: btManager.usableAdapter.discovering
+                visible: bBluetoothScanning
                 onClicked:
                 {
-                    btManager.usableAdapter.stopDiscovery()
+                    if (btManager.usableAdapter) btManager.usableAdapter.stopDiscovery()
                 }
                 Image
                 {
@@ -479,7 +479,7 @@ Page
                     smooth: true
                     NumberAnimation on rotation
                     {
-                      running: btManager.usableAdapter.discovering
+                      running: bBluetoothScanning
                       from: 0
                       to: 360
                       loops: Animation.Infinite
