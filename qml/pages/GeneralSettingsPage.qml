@@ -71,7 +71,7 @@ Page
             {
                 id: id_TextSwitch_DebugFile
                 text: qsTr("Write debug file")
-                description: qsTr("Communication with vehicle is saved to a file: $HOME/Documents/obd_log.txt")
+                description: qsTr("Communication with vehicle is saved to a file: Documents/obd_log.txt")
             }
         }
     }
