@@ -16,7 +16,7 @@ Name:       harbour-obdfish
 
 Summary:    harbour-obdfish
 Version:    0.95
-Release:    1
+Release:    2
 Group:      Qt/Qt
 License:    GPLv3
 URL:        https://github.com/poetaster/OBDFish
