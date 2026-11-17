@@ -19,6 +19,14 @@ The current code uses **BluezQt / BlueZ** to discover Bluetooth devices and regi
 
 A successful RPM build **does not establish** that Bluetooth discovery, SPP negotiation, OBD commands, or vehicle compatibility works on a particular device. See [TESTING.md](TESTING.md) for the community test procedure.
 
+## Community test release (0.95-2)
+
+**[Download the Sailfish OS 5.2 test RPMs (v0.95-test1)](https://github.com/explit28/OBDFish/releases/tag/v0.95-test1)**
+
+This pre-release contains the latest OBDFish code derived from Poetaster plus fixes to Bluetooth adapter handling and the optional diagnostic log path. It is offered for **community testing**, not as a confirmed compatible or production-stable release. Packages are built for aarch64, armv7hl and i486 with the Sailfish OS 5.2 SDK. Sailfish OS 5.1 runtime compatibility remains unverified.
+
+Do not operate the app while driving, and do not clear vehicle trouble codes during testing. Share failures using [TESTING.md](TESTING.md).
+
 ## Installation
 
 Download an RPM for your phone's architecture from [Releases](https://github.com/explit28/OBDFish/releases). For development snapshots, use a successful [GitHub Actions test build](https://github.com/explit28/OBDFish/actions) and extract the RPM from its artifact ZIP.
