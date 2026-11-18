@@ -85,8 +85,12 @@ Page
     {
         target: connectionCall
         onFinished: {
+            if (!connectionCall) return;
             if (connectionCall.error) {
                 bConnecting = false;
+                bWaitForCommandSequenceEnd = false;
+                bCommandRunning = false;
+                iInit = 0;
                 currentDevice = null;
                 fncShowMessage(3, qsTr("Error while connecting: ") + connectionCall.errorText, 8000);
             }
