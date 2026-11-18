@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - improve/sailfish5-docs-and-fixes
+      - fix/obdfish-0953-connection
   workflow_dispatch:
 
 permissions:
