@@ -1,0 +1,28 @@
+name: Promote OBDFish community test releases
+
+on:
+  push:
+    branches:
+      - fix/obdfish-0953-connection
+    paths:
+      - .github/workflows/promote-test-releases.yml
+
+permissions:
+  contents: write
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mark both releases regular and set 0.95-3 latest
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          gh release view v0.95-test1 --json tagName,assets
+          gh release view 0.95-3 --json tagName,assets
+          gh release edit v0.95-test1 --prerelease=false
+          gh release edit 0.95-3 --prerelease=false --latest
+          gh release view v0.95-test1 --json tagName,isPrerelease
+          gh release view 0.95-3 --json tagName,isPrerelease,isLatest
