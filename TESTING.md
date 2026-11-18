@@ -21,6 +21,18 @@ This build is intended for volunteer testing with **classic Bluetooth ELM327 (RF
 7. Disconnect and reconnect. Quit and reopen the app; check whether settings remain.
 8. Optionally enable diagnostics and inspect `Documents/obd_log.txt`. Sharing this file is voluntary.
 
+## Regression checks for 0.95-3
+
+These tests cover failures discussed in the Sailfish OS [OBDFish thread](https://forum.sailfishos.org/t/about-the-obdfish-app/11335?page=2).
+
+1. Connect an adapter and watch the yellow initialization indicator. Check that the terminal no longer reports `MainPage.qml:414: TypeError`.
+2. Disconnect or switch off the adapter during initialization and wait for the command timeout. Check that the UI returns to the disconnected state without `disconnectFromDevice of null` or a crash.
+3. Tap an adapter entry repeatedly during connection. Confirm that the app does not initiate overlapping connections or show `Operation already in progress`.
+4. Connect, disconnect, and reconnect several times. Watch for native crashes, memory allocator errors or stuck progress bars.
+5. If possible, repeat with [0.95-2](https://github.com/explit28/OBDFish/releases/tag/v0.95-test1) to compare behavior. Record exactly which version and adapter were used.
+
+These checks are not proof of crash resolution until repeated successfully on real devices.
+
 ## Report results
 
 Create a [new issue](https://github.com/explit28/OBDFish/issues/new) containing:
