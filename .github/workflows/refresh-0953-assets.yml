@@ -1,0 +1,41 @@
+name: Refresh 0.95-3 RPMs with About-page credits
+
+on:
+  push:
+    branches:
+      - fix/obdfish-0953-connection
+    paths:
+      - .github/workflows/refresh-0953-assets.yml
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Verify and replace the existing 0.95-3 RPMs
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          run_id=44293828413
+          commit=2ba7c68cfb0bbed6c3b9b77d2f8bfc028ea706a0
+          tag=0.95-3
+          gh run watch "$run_id" --exit-status
+          test "$(gh run view "$run_id" --json conclusion,headSha --jq '.conclusion')" = success
+          test "$(gh run view "$run_id" --json headSha --jq '.headSha')" = "$commit"
+          gh release view "$tag" --json tagName,isPrerelease
+          gh run download "$run_id" --dir downloaded
+          mapfile -d '' -t rpms < <(find downloaded -type f -name 'harbour-obdfish-0.95-3.*.rpm' -print0)
+          test "${#rpms[@]}" -eq 3
+          for arch in aarch64 armv7hl i486; do
+            printf '%s\n' "${rpms[@]}" | grep -q "\\.$arch\\.rpm$"
+          done
+          gh release upload "$tag" "${rpms[@]}" --clobber
+          gh api --method PATCH "repos/${GH_REPO}/git/refs/tags/${tag}" -f sha="$commit" -F force=true
+          gh release view "$tag" --json tagName,isPrerelease,assets --jq '{tag: .tagName, prerelease: .isPrerelease, assets: [.assets[].name]}'
