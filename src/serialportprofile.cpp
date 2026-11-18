@@ -1,7 +1,5 @@
 #include "serialportprofile.h"
 
-#include "serialportprofile.h"
-
 #include <KF5/BluezQt/bluezqt/device.h>
 //#include <BluezQt/Device>
 #include <QCoreApplication>
@@ -38,10 +36,18 @@ SerialPortProfile::newConnection(BluezQt::DevicePtr device,
                                  const QVariantMap &properties,
                                  const BluezQt::Request<> &request)
 {
-    qDebug() << "Connect" << device->name() << properties;
+    qInfo() << "SPP incoming connection from" << device->name();
+    Q_UNUSED(properties);
 
+    if (m_socket && m_socket->isValid()) {
+        qWarning() << "SPP connection refused: a socket is already active";
+        request.cancel();
+        return;
+    }
     m_socket = createSocket(fd);
-    if (!m_socket->isValid()) {
+    if (!m_socket || !m_socket->isValid()) {
+        qWarning() << "SPP connection refused: invalid socket";
+        m_socket.clear();
         request.cancel();
         return;
     }
@@ -63,11 +69,12 @@ SerialPortProfile::requestDisconnection(BluezQt::DevicePtr device,
 {
     qDebug() << "Disconnect" << device->name();
 
+    const bool hadSocket = !m_socket.isNull();
     m_socket.clear();
 
     request.accept();
 
-    emit disconnected();
+    if (hadSocket) emit disconnected();
 }
 
 void
@@ -78,6 +85,7 @@ SerialPortProfile::release()
 
 void SerialPortProfile::socketReadyRead()
 {
+    if (!m_socket) return;
     qDebug("Entering readData...");
 
     QByteArray data = m_socket->readAll();
@@ -92,6 +100,8 @@ void SerialPortProfile::socketReadyRead()
 
 void SerialPortProfile::socketDisconnected()
 {
+    if (!m_socket) return;
+    qInfo() << "SPP serial socket disconnected";
     m_socket.clear();
     emit disconnected();
 }
@@ -108,8 +118,10 @@ void SerialPortProfile::errorSocket(QLocalSocket::LocalSocketError errorCode)
 
 void SerialPortProfile::sendHex(QString sString)
 {
-    if (!m_socket)
+    if (!m_socket || !m_socket->isValid()) {
+        qWarning() << "SPP send ignored: socket unavailable";
         return;
+    }
 
     QByteArray data = sString.toUtf8();
 
