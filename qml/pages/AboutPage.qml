@@ -116,7 +116,7 @@ Page
                 color: Theme.secondaryColor
                 wrapMode: Text.WordWrap
                 horizontalAlignment: Text.AlignHCenter
-                text: "SailfishOS 5 Modifications and corrections by poetaster, ExPLIT"
+                text: "SailfishOS 5 Modifications and corrections by deepbluev7, poetaster, ExPLIT"
             }
             Label
             {
