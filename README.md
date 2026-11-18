@@ -19,13 +19,28 @@ The current code uses **BluezQt / BlueZ** to discover Bluetooth devices and regi
 
 A successful RPM build **does not establish** that Bluetooth discovery, SPP negotiation, OBD commands, or vehicle compatibility works on a particular device. See [TESTING.md](TESTING.md) for the community test procedure.
 
-## Community test release (0.95-2)
+## Community test release (0.95-3)
 
-**[Download the Sailfish OS 5.2 test RPMs (v0.95-test1)](https://github.com/explit28/OBDFish/releases/tag/v0.95-test1)**
+**[Download OBDFish 0.95-3 test RPMs](https://github.com/explit28/OBDFish/releases/tag/0.95-3)**
 
-This pre-release contains the latest OBDFish code derived from Poetaster plus fixes to Bluetooth adapter handling and the optional diagnostic log path. It is offered for **community testing**, not as a confirmed compatible or production-stable release. Packages are built for aarch64, armv7hl and i486 with the Sailfish OS 5.2 SDK. Sailfish OS 5.1 runtime compatibility remains unverified.
+This is a **pre-release for community testing**, not a production-stable or vehicle-verified version. RPMs are built against the Sailfish OS 5.2.0.15 SDK for **aarch64, armv7hl and i486**. Sailfish OS 5.1 builds and runtime behavior still require testing.
 
-Do not operate the app while driving, and do not clear vehicle trouble codes during testing. Share failures using [TESTING.md](TESTING.md).
+### Changes in 0.95-3
+
+- Correct the yellow initialization indicator's invalid QML property expression (reported as `MainPage.qml:414 TypeError`).
+- Guard device disconnects and saved-adapter lookups against a missing Bluetooth device reference (reported as `disconnectFromDevice of null`).
+- Stop initialization timers and reset command state when the Bluetooth connection disappears.
+- Ignore duplicate device-connect taps while a connection is pending.
+- Reject an overlapping serial profile socket and guard reads/writes when the socket is unavailable.
+- Add focused connection diagnostics. These changes **do not prove that the reported native crash is fixed**; further on-device and vehicle tests are required.
+
+The fixes are based in part on reports by Sailfish community members in the [OBDFish forum discussion](https://forum.sailfishos.org/t/about-the-obdfish-app/11335?page=2).
+
+### Earlier community test build
+
+[OBDFish 0.95-2](https://github.com/explit28/OBDFish/releases/tag/v0.95-test1) remains available for comparing connection behavior. The original Poetaster `0.95` release is kept separately and has RPM filenames containing `0.94-1`; those files were mirrored unchanged.
+
+Do not use the app while driving or erase vehicle trouble codes during testing. Report failures following [TESTING.md](TESTING.md).
 
 ## Installation
 
