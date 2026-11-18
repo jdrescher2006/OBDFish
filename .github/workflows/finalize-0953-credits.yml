@@ -1,0 +1,41 @@
+name: Finalize 0.95-3 RPMs with all contributors
+
+on:
+  push:
+    branches:
+      - fix/obdfish-0953-connection
+    paths:
+      - .github/workflows/finalize-0953-credits.yml
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Replace 0.95-3 release RPMs with final credits build
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          previous_publish=44293904863
+          run_id=44294027481
+          commit=1bf45c0c2f33d5efe24b4d12fde8b2cb6c558115
+          tag=0.95-3
+          gh run watch "$previous_publish" --exit-status
+          gh run watch "$run_id" --exit-status
+          test "$(gh run view "$run_id" --json conclusion --jq '.conclusion')" = success
+          test "$(gh run view "$run_id" --json headSha --jq '.headSha')" = "$commit"
+          gh run download "$run_id" --dir downloaded
+          mapfile -d '' -t rpms < <(find downloaded -type f -name 'harbour-obdfish-0.95-3.*.rpm' -print0)
+          test "${#rpms[@]}" -eq 3
+          for arch in aarch64 armv7hl i486; do
+            printf '%s\n' "${rpms[@]}" | grep -q "\\.$arch\\.rpm$"
+          done
+          gh release upload "$tag" "${rpms[@]}" --clobber
+          gh api --method PATCH "repos/${GH_REPO}/git/refs/tags/${tag}" -f sha="$commit" -F force=true
+          gh release view "$tag" --json tagName,isPrerelease,assets --jq '{tag: .tagName, prerelease: .isPrerelease, assets: [.assets[].name]}'
