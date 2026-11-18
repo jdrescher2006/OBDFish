@@ -19,13 +19,13 @@ The current code uses **BluezQt / BlueZ** to discover Bluetooth devices and regi
 
 A successful RPM build **does not establish** that Bluetooth discovery, SPP negotiation, OBD commands, or vehicle compatibility works on a particular device. See [TESTING.md](TESTING.md) for the community test procedure.
 
-## Community test release (0.95-3)
+## Community test release (0.95.3-1)
 
-**[Download OBDFish 0.95-3 test RPMs](https://github.com/explit28/OBDFish/releases/tag/0.95-3)**
+**[Download OBDFish 0.95.3-1 test RPMs](https://github.com/explit28/OBDFish/releases/tag/0.95.3-1)**
 
-This is a **pre-release for community testing**, not a production-stable or vehicle-verified version. RPMs are built against the Sailfish OS 5.2.0.15 SDK for **aarch64, armv7hl and i486**. Sailfish OS 5.1 builds and runtime behavior still require testing.
+This is a **community test release**, not a production-stable or vehicle-verified version. The RPM version was raised to **0.95.3-1** so the package manager recognizes it as newer than `0.95.2-1`. RPMs are built against the Sailfish OS 5.2.0.15 SDK for **aarch64, armv7hl and i486**. Sailfish OS 5.1 builds and runtime behavior still require testing.
 
-### Changes in 0.95-3
+### Changes in 0.95.3-1
 
 - Correct the yellow initialization indicator's invalid QML property expression (reported as `MainPage.qml:414 TypeError`).
 - Guard device disconnects and saved-adapter lookups against a missing Bluetooth device reference (reported as `disconnectFromDevice of null`).
@@ -36,7 +36,9 @@ This is a **pre-release for community testing**, not a production-stable or vehi
 
 The fixes are based in part on reports by Sailfish community members in the [OBDFish forum discussion](https://forum.sailfishos.org/t/about-the-obdfish-app/11335?page=2).
 
-### Earlier community test build
+### Earlier community test builds
+
+[OBDFish 0.95-3](https://github.com/explit28/OBDFish/releases/tag/0.95-3) contains the same connection fixes and About-page credits but its RPM version is `0.95-3`, which sorts below `0.95.2-1`. **Use 0.95.3-1 for upgrades.**
 
 [OBDFish 0.95-2](https://github.com/explit28/OBDFish/releases/tag/v0.95-test1) remains available for comparing connection behavior. The original Poetaster `0.95` release is kept separately and has RPM filenames containing `0.94-1`; those files were mirrored unchanged.
 
