@@ -110,6 +110,16 @@ Page
             }
             Label
             {
+                width: parent.width - 2 * Theme.horizontalPageMargin
+                anchors.horizontalCenter: parent.horizontalCenter
+                font.pixelSize: Theme.fontSizeExtraSmall
+                color: Theme.secondaryColor
+                wrapMode: Text.WordWrap
+                horizontalAlignment: Text.AlignHCenter
+                text: "SailfishOS 5 Modifications and corrections by deepbluev7, poetaster, ExPLIT"
+            }
+            Label
+            {
                 anchors.horizontalCenter: parent.horizontalCenter
                 font.pixelSize: Theme.fontSizeExtraSmall
                 color: Theme.secondaryColor

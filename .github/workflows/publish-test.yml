@@ -1,0 +1,55 @@
+name: Publish OBDFish 0.95 test RPMs
+
+on:
+  push:
+    branches: [improve/sailfish5-docs-and-fixes]
+    paths:
+      - .github/workflows/publish-test.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  prerelease:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Publish verified successful community build
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          run_id=44059073233
+          tag=v0.95-test1
+          commit=dff92915f608585fc1d62d3906ba393c8b35c21e
+          conclusion="$(gh run view "$run_id" --json conclusion --jq '.conclusion')"
+          if [ "$conclusion" != success ]; then
+            echo "::error::Source build $run_id is not successful: $conclusion"
+            exit 1
+          fi
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo "::error::Release $tag already exists; refusing to overwrite it"
+            exit 1
+          fi
+          gh run download "$run_id" --dir downloaded
+          mapfile -d '' -t rpms < <(find downloaded -type f -name '*.rpm' -print0)
+          if [ "${#rpms[@]}" -ne 3 ]; then
+            echo "::error::Expected exactly 3 RPMs; got ${#rpms[@]}"
+            exit 1
+          fi
+          for arch in aarch64 armv7hl i486; do
+            if ! printf '%s\n' "${rpms[@]}" | grep -q "\.$arch\.rpm$"; then
+              echo "::error::Missing $arch RPM"
+              exit 1
+            fi
+          done
+          gh release create "$tag" "${rpms[@]}" \
+            --target "$commit" \
+            --title "OBDFish 0.95-2 — Sailfish OS 5.2 community test" \
+            --prerelease \
+            --notes "Community test build based on poetaster/OBDFish. Built with Sailfish OS 5.2.0.15 SDK for aarch64, armv7hl and i486; source GitHub Actions run: https://github.com/explit28/OBDFish/actions/runs/44059073233. Changes: modernized README, volunteer testing checklist, fixed diagnostic Documents log path, guarded missing Bluetooth adapter UI. Classic Bluetooth ELM327 (SPP) only; BLE and Wi-Fi adapters not supported. This is a test build: real vehicle functionality and Sailfish OS 5.1 compatibility have not been verified. Do not operate while driving or erase diagnostic codes during testing. Please report results: https://github.com/explit28/OBDFish/blob/improve/sailfish5-docs-and-fixes/TESTING.md"

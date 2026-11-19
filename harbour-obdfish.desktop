@@ -6,3 +6,8 @@ Exec=harbour-obdfish
 Name=OBDFish
 Name[de]=OBDFish
 
+[X-Sailjail]
+OrganizationName=obdfish
+ApplicationName=harbour-obdfish
+Permissions=Bluetooth;Documents
+

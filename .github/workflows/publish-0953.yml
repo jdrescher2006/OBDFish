@@ -1,0 +1,60 @@
+name: Publish OBDFish 0.95-3 test release
+
+on:
+  push:
+    branches:
+      - fix/obdfish-0953-connection
+    paths:
+      - .github/workflows/publish-0953.yml
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Verify build and publish test RPMs
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          run_id=44291990688
+          tag=0.95-3
+          source_commit=5cf2b3e4d4b5cbb980eca217b22217d815774249
+          gh run watch "$run_id" --exit-status
+          conclusion="$(gh run view "$run_id" --json conclusion --jq '.conclusion')"
+          test "$conclusion" = success
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo "Release $tag already exists. Refusing to modify it."
+            exit 1
+          fi
+          gh run download "$run_id" --dir downloaded
+          mapfile -d '' -t rpms < <(find downloaded -type f -name 'harbour-obdfish-0.95-3.*.rpm' -print0)
+          test "${#rpms[@]}" -eq 3
+          for arch in aarch64 armv7hl i486; do
+            printf '%s\n' "${rpms[@]}" | grep -q "\\.$arch\\.rpm$"
+          done
+          gh release create "$tag" "${rpms[@]}" \
+            --target "$source_commit" \
+            --title "OBDFish 0.95-3 — TEST VERSION (Sailfish OS 5.2)" \
+            --prerelease \
+            --notes "Community testing build for classic Bluetooth ELM327 adapters on Sailfish OS 5.1 / 5.2.
+
+          Changes from 0.95-2:
+          - Correct a malformed yellow-status QML property expression.
+          - Guard Bluetooth device disconnects and missing device references.
+          - Reset initialization timers and pending command state on disconnect/errors.
+          - Ignore duplicate connection requests and overlapping serial profile sockets.
+          - Add connection diagnostics and safe socket read/write guards.
+
+          Built with Sailfish OS 5.2.0.15 SDK: aarch64, armv7hl, i486.
+
+          **TEST VERSION:** Not yet validated in a vehicle or on Jolla C2 / Jolla 2. Sailfish OS 5.1 runtime compatibility remains unverified. The reported native crash is not confirmed fixed.
+
+          See README.md and TESTING.md in the repository for installation, safety and reporting instructions. Never test while driving. Do not erase fault codes."

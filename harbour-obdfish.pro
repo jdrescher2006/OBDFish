@@ -20,8 +20,7 @@ QMAKE_LFLAGS += -std=c++0x
 DEFINES += APP_VERSION=\"\\\"$${VERSION}\\\"\"
 
 SOURCES += src/harbour-obdfish.cpp \
-    src/bluetoothconnection.cpp \
-    src/bluetoothdata.cpp \
+    src/serialportprofile.cpp \
     src/filewriter.cpp \
     src/projectsettings.cpp \
     src/plotwidget.cpp
@@ -47,15 +46,15 @@ CONFIG += sailfishapp_i18n
 TRANSLATIONS += translations/harbour-obdfish-de.ts
 
 HEADERS += \
-    src/bluetoothconnection.h \
-    src/bluetoothdata.h \
+    src/serialportprofile.h \
     src/filewriter.h \
     src/projectsettings.h \
     src/plotwidget.h
 
-QT += bluetooth
+QT += dbus
 
 DISTFILES += \
+    qml/pages/DynPage.qml \
     rpm/harbour-obdfish.spec \
     qml/pages/SharedResources.js \
     qml/pages/OBDDataObject.js \
@@ -64,11 +63,7 @@ DISTFILES += \
     qml/tools/Messagebox.qml \
     qml/pages/AboutPage.qml \
     qml/obdfish.png \
-    qml/pages/Dyn1Page.qml \
-    qml/pages/Dyn2Page.qml \
     qml/pages/SettingsPage.qml \
-    qml/pages/SettingsDataObject.js \
-    qml/pages/Dyn3Page.qml \
     qml/icon-lock-error.png \
     qml/icon-lock-info.png \
     qml/icon-lock-ok.png \
@@ -80,3 +75,5 @@ DISTFILES += \
     qml/obd_ok.png \
     qml/obd_error.png \
     rpm/harbour-obdfish.changes
+
+unix: PKGCONFIG += KF5BluezQt

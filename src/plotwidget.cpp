@@ -99,7 +99,7 @@ void PlotWidget::addValue(qreal v)
     m_minValue =  1e27;
     m_maxValue = -1e27;
 
-    for(const qreal &v: m_values) {
+    for(const qreal &v: const_cast<const QList<qreal>&>(m_values)) {
         if(v < m_minValue) {
             m_minValue = v;
         }

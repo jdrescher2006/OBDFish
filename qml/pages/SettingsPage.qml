@@ -18,16 +18,21 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import "OBDDataObject.js" as OBDDataObject
-import "SettingsDataObject.js" as SettingsDataObject
 
 Page
 {
+    id: setPage
+
     allowedOrientations: Orientation.All
     property bool bPushSettingsPage: true
     property bool bInitPage: true
     property bool bPageInitialized: false
     property variant arComboboxStringArray : []    
     property int iPIDPageIndex: 0;
+
+    property var arPIDarray: ({})
+    property var arLookupPID: ({})
+    property var arLookupINDEX: ({})
 
     //Called when a combobox selection changes
     function fncOnComboboxCompleted()
@@ -41,7 +46,7 @@ Page
         //It refers to PID 0000.
         var arComboarray = [qsTr("Empty")];
 
-        SettingsDataObject.arPIDarray = [{text: qsTr("Empty"), pid: "0000", index: 0}];
+        setPage.arPIDarray = [{text: qsTr("Empty"), pid: "0000", index: 0}];
 
         var iLoopVar = 1;
         for (var i = 0; i < OBDDataObject.arrayPIDs.length; i++)
@@ -55,55 +60,54 @@ Page
 
                 //Add the other data for this PID to a helper array.
                 //This array is later used to get the data for the PID based on the index.
-                SettingsDataObject.arPIDarray.push({text: OBDDataObject.arrayPIDs[i].labeltext, pid: OBDDataObject.arrayPIDs[i].pid, index: iLoopVar});
+                setPage.arPIDarray.push({text: OBDDataObject.arrayPIDs[i].labeltext, pid: OBDDataObject.arrayPIDs[i].pid, index: iLoopVar});
 
                 iLoopVar++;
             }            
         }
 
         //Fill lookup arrays. Can find entrys based on PID or INDEX as key.       
-        for (var j = 0; j < SettingsDataObject.arPIDarray.length; j++)
+        for (var j = 0; j < setPage.arPIDarray.length; j++)
         {
             console.log("j: " + j.toString());
-            console.log("SettingsDataObject.arPIDarray[j].pid: " + SettingsDataObject.arPIDarray[j].pid);
-            console.log("SettingsDataObject.arPIDarray[j].index: " + SettingsDataObject.arPIDarray[j].index);
+            console.log("setPage.arPIDarray[j].pid: " + setPage.arPIDarray[j].pid);
+            console.log("setPage.arPIDarray[j].index: " + setPage.arPIDarray[j].index);
 
-            SettingsDataObject.arLookupPID[SettingsDataObject.arPIDarray[j].pid] = SettingsDataObject.arPIDarray[j];
-            SettingsDataObject.arLookupINDEX[SettingsDataObject.arPIDarray[j].index] = SettingsDataObject.arPIDarray[j];
+            setPage.arLookupPID[setPage.arPIDarray[j].pid] = setPage.arPIDarray[j];
+            setPage.arLookupINDEX[setPage.arPIDarray[j].index] = setPage.arPIDarray[j];
         }            
 
         arComboboxStringArray = arComboarray;
-    } 
+    }
+
+    ListModel {
+        id: parameterSettings
+    }
 
     onStatusChanged:
     {
+        var i = 0;
+
         //Called when page is initialized
         if (status === PageStatus.Active && bPushSettingsPage)
         {
             bInitPage = true;
             bPushSettingsPage = false;
+            parameterSettings.clear();
+            fncOnComboboxCompleted();
 
             //Generate array for the start index of the copmboboxes
             var arPIDsPage = arPIDsPagesArray[iPIDPageIndex].split(",");
 
             //Go through array and check if there are unsupported values.
             //Those values will be exchanged to empty fields this is PID "0000".
-            for (var i = 0; i < arPIDsPage.length; i++)
+            for (i = 0; i < arPIDsPage.length; i++)
             {                
-                if (arPIDsPage[i] !== "0000" && OBDDataObject.arrayLookupPID[arPIDsPage[i].toLowerCase()].supported === false)
+                if (arPIDsPage[i] !== "0000" && OBDDataObject.arrayLookupPID[arPIDsPage[i].toLowerCase()].supported)
                 {
-                    arPIDsPage[i] = "0000";
+                    parameterSettings.append({"pid": arPIDsPage[i].toLowerCase()})
                 }
             }
-
-            //Set start indexes of comboboxes.
-            //This has to be done here, because the boxes first have to be filled with the models. That is a timing issue.
-            id_CMB_page1_1.currentIndex = SettingsDataObject.arLookupPID[arPIDsPage[0]].index;
-            id_CMB_page1_2.currentIndex = SettingsDataObject.arLookupPID[arPIDsPage[1]].index;
-            id_CMB_page1_3.currentIndex = SettingsDataObject.arLookupPID[arPIDsPage[2]].index;
-            id_CMB_page1_4.currentIndex = SettingsDataObject.arLookupPID[arPIDsPage[3]].index;
-            id_CMB_page1_5.currentIndex = SettingsDataObject.arLookupPID[arPIDsPage[4]].index;
-            id_CMB_page1_6.currentIndex = SettingsDataObject.arLookupPID[arPIDsPage[5]].index;
 
             bInitPage = false;
         }
@@ -118,12 +122,19 @@ Page
 
             //Check if fields are valid and have changed. Save values.
             //Generate PID strings from comboboxe indexes
-            sPIDsPageFromPage = SettingsDataObject.arLookupINDEX[id_CMB_page1_1.currentIndex].pid + "," +
-                    SettingsDataObject.arLookupINDEX[id_CMB_page1_2.currentIndex].pid + "," +
-                    SettingsDataObject.arLookupINDEX[id_CMB_page1_3.currentIndex].pid + "," +
-                    SettingsDataObject.arLookupINDEX[id_CMB_page1_4.currentIndex].pid + "," +
-                    SettingsDataObject.arLookupINDEX[id_CMB_page1_5.currentIndex].pid + "," +
-                    SettingsDataObject.arLookupINDEX[id_CMB_page1_6.currentIndex].pid;
+            for (i = 0; i < parameterSettings.count; i++) {
+                var pid =  parameterSettings.get(i).pid
+
+                if (pid && pid !== "0000") {
+                    if (sPIDsPageFromPage)
+                        sPIDsPageFromPage = sPIDsPageFromPage + ",";
+                    sPIDsPageFromPage = sPIDsPageFromPage + pid;
+                }
+            }
+
+            var tempdispstyle = pagesDisplayStyle
+            pagesDisplayStyle = []
+            pagesDisplayStyle = tempdispstyle
 
             //Check if settings changed.
             if (sPIDsPageFromPage !== arPIDsPagesArray[iPIDPageIndex])
@@ -139,6 +150,7 @@ Page
 
                 //Save new configuration to project settings
                 id_ProjectSettings.vSaveProjectData("PIDsPage" + (iPIDPageIndex + 1).toString(), sPIDsPageFromPage);
+                id_ProjectSettings.vSaveProjectData("PIDsPageStyle" + (iPIDPageIndex + 1).toString(), ""+pagesDisplayStyle[iPIDPageIndex]);
 
                  console.log("arPIDsPagesArray[iPIDPageIndex]: " + arPIDsPagesArray[iPIDPageIndex]);
             }           
@@ -171,54 +183,39 @@ Page
                     text = sFirstString + (iPIDPageIndex + 1).toString();
                 }
             }
-            ComboBox
-            {
-                id: id_CMB_page1_1
+
+            ComboBox{
+                id: cmbDisplayStyle
                 width: parent.width
-                label: 'Parameter1:'                
-                menu: ContextMenu { Repeater { model: arComboboxStringArray; MenuItem { text: modelData }}}
-                Component.onCompleted: { if (bPageInitialized===false) fncOnComboboxCompleted(); }
+                label: qsTr('Display Style:')
+                currentIndex: pagesDisplayStyle[iPIDPageIndex] === "small" ? 0 : 1
+                onCurrentIndexChanged: pagesDisplayStyle[iPIDPageIndex] = (cmbDisplayStyle.currentIndex === 0) ? "small" : "big"
+                menu: ContextMenu {
+                    MenuItem { text: qsTr("Small with label") }
+                    MenuItem { text: qsTr("Only value but very big") }
+                }
             }
-            ComboBox
-            {
-                id: id_CMB_page1_2
-                width: parent.width
-                label: 'Parameter2:'
-                menu: ContextMenu { Repeater { model: arComboboxStringArray; MenuItem { text: modelData } }}
-                Component.onCompleted: { if (bPageInitialized===false) fncOnComboboxCompleted(); }
-            }            
-            ComboBox
-            {
-                id: id_CMB_page1_3
-                width: parent.width
-                label: 'Parameter3:'
-                menu: ContextMenu { Repeater { model: arComboboxStringArray; MenuItem { text: modelData } }}
-                Component.onCompleted: { if (bPageInitialized===false) fncOnComboboxCompleted(); }
+
+            Repeater {
+                model: parameterSettings
+                delegate: ComboBox
+                {
+                    id: cmb
+                    width: parent.width
+                    label: qsTr('Parameter %1:').arg(model.index)
+                    currentIndex: setPage.arLookupPID[model.pid].index
+                    onCurrentIndexChanged: parameterSettings.setProperty(model.index, "pid", setPage.arLookupINDEX[cmb.currentIndex].pid)
+                    menu: ContextMenu { Repeater { model: arComboboxStringArray; MenuItem { text: modelData }}}
+                }
             }
-            ComboBox
+
+
+            Button
             {
-                id: id_CMB_page1_4
                 width: parent.width
-                label: 'Parameter4:'
-                menu: ContextMenu { Repeater { model: arComboboxStringArray; MenuItem { text: modelData } }}
-                Component.onCompleted: { if (bPageInitialized===false) fncOnComboboxCompleted(); }
+                text: qsTr("Add Parameter")
+                onClicked: parameterSettings.append({"pid": "0000"})
             }
-            ComboBox
-            {
-                id: id_CMB_page1_5
-                width: parent.width
-                label: 'Parameter5:'
-                menu: ContextMenu { Repeater { model: arComboboxStringArray; MenuItem { text: modelData } }}
-                Component.onCompleted: { if (bPageInitialized===false) fncOnComboboxCompleted(); }
-            }
-            ComboBox
-            {
-                id: id_CMB_page1_6
-                width: parent.width
-                label: 'Parameter6:'
-                menu: ContextMenu { Repeater { model: arComboboxStringArray; MenuItem { text: modelData } }}
-                Component.onCompleted: { if (bPageInitialized===false) fncOnComboboxCompleted(); }
-            }        
         }
     }
 }

@@ -18,39 +18,50 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import "pages"
-import org.nemomobile.notifications 1.0
+import Nemo.Notifications 1.0
 import harbour.obdfish 1.0
 import QtSensors 5.0 as Sensors
 import "tools"
 import "pages/OBDDataObject.js" as OBDDataObject
+import org.kde.bluezqt 1.0 as BluezQt
 
 ApplicationWindow
 {
     //Define global variables
-    property bool bConnected: false;
     property bool bConnecting: false;
     property bool bCommandRunning: false;
     property string sReceiveBuffer: "";
     property string sELMVersion: "";
     property bool bSaveDataToDebugFile: false;
-    property variant arPIDsPagesArray : [ "010d,0000,0000,0000,0000,0000", "0104,0105,010c,010d,010e,0111", "0104,0105,010c,010d,010e,0111" ]
+    property var arPIDsPagesArray : [ "010d,0000,0000,0000,0000,0000", "0104,0105,010c,010d,010e,0111", "0104,0105,010c,010d,010e,0111" ]
+    property var pagesDisplayStyle: ["small", "small", "big"]
     property bool bDoNotShowDTCWarning : false;
     property string sCoverValue1 : "";
     property string sCoverValue2 : "";
     property string sCoverValue3 : "";
 
     //Init C++ classes, libraries
-    PlotWidget{ id: id_PlotWidget }
-    BluetoothConnection{ id: id_BluetoothConnection }
-    BluetoothData{ id: id_BluetoothData }
     FileWriter{ id: id_FileWriter }
     ProjectSettings{ id: id_ProjectSettings }
     Notification { id: mainPageNotification }
 
+    property QtObject btManager: BluezQt.Manager
+    property int devicesCount: btManager.devices.length
+    property int adaptersCount: btManager.adapters.length
+
+    Component.onCompleted: {
+        console.log("Manager operational:", btManager.operational)
+    }
+
+    Connections {
+        target: btManager
+        onOperationalChanged: console.log("Manager operational2:", btManager.operational)
+    }
+
     Connections
     {
-        target: id_BluetoothData
-        onSigReadDataReady:     //This is called from C++ if there is data via bluetooth
+        target: obdConnection
+        onDataReady:     //This is called from C++ if there is data via bluetooth
         {
             //Check received data
             fncGetData(sData);
@@ -116,7 +127,7 @@ ApplicationWindow
         if (bSaveDataToDebugFile) id_FileWriter.vWriteData("Send: " + sCommand + "\r\n");
 
         //Send the AT command via bluetooth
-        id_BluetoothData.sendHex(sCommand);        
+        obdConnection.sendHex(sCommand);
 
         return true;
     }
